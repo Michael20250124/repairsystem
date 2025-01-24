@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理員後台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>管理員後台</h1>
+        <table id="submissionsTable">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>帳號</th>
+                    <th>Email</th>
+                    <th>部門</th>
+                    <th>問題描述</th>
+                    <th>是否已 Google</th>
+                    <th>是否已問過 AI</th>
+                    <th>提交日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 資料會動態插入這裡 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 從 localStorage 獲取提交資料
+        let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+
+        // 顯示資料到表格
+        const tableBody = document.querySelector('#submissionsTable tbody');
+        submissions.forEach((submission, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${submission.name}</td>
+                <td>${submission.account}</td>
+                <td>${submission.email}</td>
+                <td>${submission.department}</td>
+                <td>${submission.issue}</td>
+                <td>${submission.googleCheck}</td>
+                <td>${submission.aiCheck}</td>
+                <td>${submission.date}</td>
+                <td>
+                    <button class="delete-btn" onclick="deleteSubmission(${index})">刪除</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // 刪除提交資料
+        function deleteSubmission(index) {
+            submissions.splice(index, 1); // 從陣列中移除資料
+            localStorage.setItem('submissions', JSON.stringify(submissions)); // 更新 localStorage
+            location.reload(); // 重新載入頁面
+        }
+    </script>
+</body>
+</html>

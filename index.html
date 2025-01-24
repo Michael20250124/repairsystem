@@ -59,6 +59,17 @@
             color: green;
             font-weight: bold;
         }
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .admin-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -106,13 +117,36 @@
         <div class="confirmation" id="confirmation">
             叫修單已提交，我們會盡快處理！
         </div>
+        <div class="admin-link">
+            <a href="admin.html">管理員後台</a>
+        </div>
     </div>
 
     <script>
+        // 儲存提交資料到 localStorage
         document.getElementById('repairForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 防止表單提交
-            document.getElementById('repairForm').style.display = 'none'; // 隱藏表單
-            document.getElementById('confirmation').style.display = 'block'; // 顯示確認訊息
+
+            // 獲取表單資料
+            const formData = {
+                name: document.getElementById('name').value,
+                account: document.getElementById('account').value,
+                email: document.getElementById('email').value,
+                department: document.getElementById('department').value,
+                issue: document.getElementById('issue').value,
+                googleCheck: document.getElementById('google-check').value,
+                aiCheck: document.getElementById('ai-check').value,
+                date: new Date().toLocaleString() // 提交日期
+            };
+
+            // 將資料儲存到 localStorage
+            let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            submissions.push(formData);
+            localStorage.setItem('submissions', JSON.stringify(submissions));
+
+            // 顯示確認訊息
+            document.getElementById('repairForm').style.display = 'none';
+            document.getElementById('confirmation').style.display = 'block';
         });
     </script>
 </body>

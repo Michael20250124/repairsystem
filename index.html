@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系統架構部-電腦叫修系統</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+        .confirmation {
+            display: none;
+            text-align: center;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>系統架構部-電腦叫修系統</h1>
+        <form id="repairForm">
+            <div class="form-group">
+                <label for="name">姓名：</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="account">帳號：</label>
+                <input type="text" id="account" name="account" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email：</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="department">部門：</label>
+                <input type="text" id="department" name="department" required>
+            </div>
+            <div class="form-group">
+                <label for="issue">問題描述：</label>
+                <textarea id="issue" name="issue" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="google-check">是否已 Google 過問題解法：</label>
+                <select id="google-check" name="google-check" required>
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ai-check">是否已問過美律 AI 機器人：</label>
+                <select id="ai-check" name="ai-check" required>
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">提交叫修單</button>
+            </div>
+        </form>
+        <div class="confirmation" id="confirmation">
+            叫修單已提交，我們會盡快處理！
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('repairForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 防止表單提交
+            document.getElementById('repairForm').style.display = 'none'; // 隱藏表單
+            document.getElementById('confirmation').style.display = 'block'; // 顯示確認訊息
+        });
+    </script>
+</body>
+</html>

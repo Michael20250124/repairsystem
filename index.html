@@ -139,9 +139,13 @@
                 date: new Date().toLocaleString() // 提交日期
             };
 
-            // 將資料儲存到 localStorage
+            // 從 localStorage 獲取現有的提交資料
             let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+
+            // 將新資料追加到現有的資料列表中
             submissions.push(formData);
+
+            // 將更新後的資料存回 localStorage
             localStorage.setItem('submissions', JSON.stringify(submissions));
 
             // 顯示確認訊息

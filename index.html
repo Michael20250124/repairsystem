@@ -11,8 +11,20 @@
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+        .form-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .submissions-container {
+            flex: 1;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -59,6 +71,18 @@
             color: green;
             font-weight: bold;
         }
+        .submissions-list {
+            margin-top: 20px;
+        }
+        .submission-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .submission-item p {
+            margin: 5px 0;
+        }
         .admin-link {
             text-align: center;
             margin-top: 20px;
@@ -74,56 +98,67 @@
 </head>
 <body>
     <div class="container">
-        <h1>系統架構部-電腦叫修系統</h1>
-        <form id="repairForm">
-            <div class="form-group">
-                <label for="name">姓名：</label>
-                <input type="text" id="name" name="name" required>
+        <!-- 表單區塊 -->
+        <div class="form-container">
+            <h1>系統架構部-電腦叫修系統</h1>
+            <form id="repairForm">
+                <div class="form-group">
+                    <label for="name">姓名：</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="account">帳號：</label>
+                    <input type="text" id="account" name="account" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email：</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="department">部門：</label>
+                    <input type="text" id="department" name="department" required>
+                </div>
+                <div class="form-group">
+                    <label for="issue">問題描述：</label>
+                    <textarea id="issue" name="issue" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="google-check">是否已 Google 過問題解法：</label>
+                    <select id="google-check" name="google-check" required>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ai-check">是否已問過美律 AI 機器人：</label>
+                    <select id="ai-check" name="ai-check" required>
+                        <option value="是">是</option>
+                        <option value="否">否</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit">提交叫修單</button>
+                </div>
+            </form>
+            <div class="confirmation" id="confirmation">
+                叫修單已提交，我們會盡快處理！
             </div>
-            <div class="form-group">
-                <label for="account">帳號：</label>
-                <input type="text" id="account" name="account" required>
+            <div class="admin-link">
+                <a href="admin.html">管理員後台</a>
             </div>
-            <div class="form-group">
-                <label for="email">Email：</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="department">部門：</label>
-                <input type="text" id="department" name="department" required>
-            </div>
-            <div class="form-group">
-                <label for="issue">問題描述：</label>
-                <textarea id="issue" name="issue" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="google-check">是否已 Google 過問題解法：</label>
-                <select id="google-check" name="google-check" required>
-                    <option value="是">是</option>
-                    <option value="否">否</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="ai-check">是否已問過美律 AI 機器人：</label>
-                <select id="ai-check" name="ai-check" required>
-                    <option value="是">是</option>
-                    <option value="否">否</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <button type="submit">提交叫修單</button>
-            </div>
-        </form>
-        <div class="confirmation" id="confirmation">
-            叫修單已提交，我們會盡快處理！
         </div>
-        <div class="admin-link">
-            <a href="admin.html">管理員後台</a>
+
+        <!-- 提交資料顯示區塊 -->
+        <div class="submissions-container">
+            <h2>已提交的資料</h2>
+            <div class="submissions-list" id="submissionsList">
+                <!-- 提交的資料會動態插入這裡 -->
+            </div>
         </div>
     </div>
 
     <script>
-        // 儲存提交資料到 localStorage
+        // 儲存提交資料到 localStorage 並顯示在畫面右邊
         document.getElementById('repairForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 防止表單提交
 
@@ -151,7 +186,38 @@
             // 顯示確認訊息
             document.getElementById('repairForm').style.display = 'none';
             document.getElementById('confirmation').style.display = 'block';
+
+            // 更新畫面右邊的提交資料列表
+            updateSubmissionsList(submissions);
         });
+
+        // 更新畫面右邊的提交資料列表
+        function updateSubmissionsList(submissions) {
+            const submissionsList = document.getElementById('submissionsList');
+            submissionsList.innerHTML = ''; // 清空現有內容
+
+            submissions.forEach((submission, index) => {
+                const submissionItem = document.createElement('div');
+                submissionItem.className = 'submission-item';
+                submissionItem.innerHTML = `
+                    <p><strong>姓名：</strong>${submission.name}</p>
+                    <p><strong>帳號：</strong>${submission.account}</p>
+                    <p><strong>Email：</strong>${submission.email}</p>
+                    <p><strong>部門：</strong>${submission.department}</p>
+                    <p><strong>問題描述：</strong>${submission.issue}</p>
+                    <p><strong>是否已 Google：</strong>${submission.googleCheck}</p>
+                    <p><strong>是否已問過 AI：</strong>${submission.aiCheck}</p>
+                    <p><strong>提交日期：</strong>${submission.date}</p>
+                `;
+                submissionsList.appendChild(submissionItem);
+            });
+        }
+
+        // 頁面載入時顯示現有的提交資料
+        window.onload = function() {
+            const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+            updateSubmissionsList(submissions);
+        };
     </script>
 </body>
 </html>

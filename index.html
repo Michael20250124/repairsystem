@@ -125,8 +125,43 @@
        <div class="form-container">
            <h1>系統架構部-電腦叫修系統</h1>
            <form id="repairForm">
-               <!-- 表單內容 -->
-               <!-- 此處省略之前的表單元素以節省空間，保持不變 -->
+               <div class="form-group">
+                   <label for="name">姓名：</label>
+                   <input type="text" id="name" name="name" required>
+               </div>
+               <div class="form-group">
+                   <label for="account">帳號：</label>
+                   <input type="text" id="account" name="account" required>
+               </div>
+               <div class="form-group">
+                   <label for="email">Email：</label>
+                   <input type="email" id="email" name="email" required>
+               </div>
+               <div class="form-group">
+                   <label for="department">部門：</label>
+                   <input type="text" id="department" name="department" required>
+               </div>
+               <div class="form-group">
+                   <label for="issue">問題描述：</label>
+                   <textarea id="issue" name="issue" required></textarea>
+               </div>
+               <div class="form-group">
+                   <label for="google-check">是否已 Google 過問題解法：</label>
+                   <select id="google-check" name="google-check" required>
+                       <option value="是">是</option>
+                       <option value="否">否</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label for="ai-check">是否已問過美律 AI 機器人：</label>
+                   <select id="ai-check" name="ai-check" required>
+                       <option value="是">是</option>
+                       <option value="否">否</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <button type="submit">提交叫修單</button>
+               </div>
            </form>
            <div class="confirmation" id="confirmation">
                叫修單已提交，我們會盡快處理！
@@ -169,7 +204,6 @@
        // 處理表單提交事件
        document.getElementById('repairForm').addEventListener('submit', function(event) {
            event.preventDefault(); // 防止表單提交
-           // 獲取表單資料
            const formData = {
                name: document.getElementById('name').value,
                account: document.getElementById('account').value,
@@ -180,23 +214,18 @@
                aiCheck: document.getElementById('ai-check').value,
                date: new Date().toLocaleString() // 提交日期
            };
-           // 從 localStorage 獲取現有的提交資料
            let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
-           // 將新資料追加到現有的資料列表中
            submissions.push(formData);
-           // 將更新後的資料存回 localStorage
            localStorage.setItem('submissions', JSON.stringify(submissions));
-           // 顯示確認訊息
            document.getElementById('repairForm').style.display = 'none';
            document.getElementById('confirmation').style.display = 'block';
-           // 更新畫面右邊的提交資料列表
            updateSubmissionsList(submissions);
        });
 
        // 更新畫面右邊的提交資料列表
        function updateSubmissionsList(submissions) {
            const submissionsList = document.getElementById('submissionsList');
-           submissionsList.innerHTML = ''; // 清空現有內容
+           submissionsList.innerHTML = '';
            submissions.forEach((submission, index) => {
                const submissionItem = document.createElement('div');
                submissionItem.className = 'submission-item';
@@ -216,7 +245,7 @@
 
        // 頁面載入時顯示現有的提交資料
        window.onload = function() {
-           const submissions = JSON.parse(localStorage.getItem('submissions')) || [];
+           let submissions = JSON.parse(localStorage.getItem('submissions')) || [];
            updateSubmissionsList(submissions);
        };
 
@@ -231,13 +260,10 @@
            event.preventDefault(); // 防止表單提交
            const account = document.getElementById('loginAccount').value;
            const password = document.getElementById('loginPassword').value;
-           // 驗證帳號和密碼
            if (account === 'repair' && password === 'goodfix168') {
-               // 登入成功，導向管理員後台
                window.location.href = 'admin.html'; // 替換為你的後台頁面URL
                alert('登入成功！');
            } else {
-               // 登入失敗
                alert('帳號或密碼錯誤！');
            }
        });
